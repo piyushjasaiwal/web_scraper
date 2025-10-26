@@ -96,14 +96,14 @@ python scraper.py --projects HADOOP SPARK KAFKA --output output.jsonl
 ## Edge Cases handled
 
 1. **Status code 429**: Too many requests, To handle this scenario the waiting time is extracted from the response header or 60 seconds is choosen as a default value in case the header is not present.
-2. **Status code 5XX**: To handle the same the request is retried after 5 second, in case the issue is temporal and the request is served after 5 seconds.
+2. **Status code 5XX**: To handle the same. the request is retried after 5 second, in case the issue is temporal and the request is served after 5 seconds.
 3. **Any other status code**: In any other case, the process is failed for the current project and the execution proceeds normally for the other projects. The user can retry to get more issues by running the command again in the terminal.
 
 ## Optimisation
-1. For a projects which has a lot of issue tickets, the code is optimised to stop after fetching first 10K issues only. This optimiosation is done so that the program does not run forever and the user can see what the actual output looks like.
-2. For each project the issues extracted are stored in different individual files so the user can bifurcate the various issues scraped for different projects.
+1. For a project which has a lot of issue tickets, the code is optimised to stop after fetching first 10K issues only. This optimisation is done so that the program does not run forever and the user can see what the actual output looks like after waiting for a while.
+2. For each project the issues extracted are stored in different individual files so that the user can bifurcate the various issues scrapped for different projects.
 3. The checkpoint file for the project is updated after each page is exracted and if there is a failure during the extraction of any particular page the checkpoint file make sure that next time the issues are only extracted after that paricular checkpoint.
 
 # Future Improvements
-- First support for multithreading using asyncio can be added in the system so that issues for the projects are extracted asynchronously and parallely as this is a io bound process where after firing the HTTP request the CPU is waiting for the response and is blocked until it gets a response back from the apache server.
-- Second, the jira checkpoint file can be broken down into individual checkpoint files for each project. So that the race condition does not occur when multiple threads are trying to modify the same resource\
+- First support for multithreading using asyncio can be added in the system so that issues for the projects are extracted asynchronously and parallely as this is an io bound process where after firing the HTTP request the CPU is waiting for the response and is blocked until it gets a response back from the apache server.
+- Second, the jira checkpoint file can be broken down into individual checkpoint files for each project. So that the race condition does not occur when multiple threads are trying to modify the same resource.
